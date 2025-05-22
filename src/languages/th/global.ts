@@ -1,0 +1,43 @@
+const global = {
+  star: '*',
+  seccond: 'วินาที',
+  email: 'อีเมล์',
+  telephoneNumber: 'เบอร์โทรศัพท์',
+  HealthCare: 'HealthCare',
+  signIn: 'ลงชื่อเข้าใช้',
+  language: 'th',
+  skip: 'ข้าม',
+  next: 'ต่อไป',
+  register: 'สมัครสมาชิก',
+  titleAllowLocation:
+    'เราต้องการเข้าถึงตำแหน่งที่อยู่\nของคุณเพื่อความรวดเร็ว\nในการให้บริการนอกสถานที่และ\nการแนะนำบริการของ\nคลีนิคการแพทย์ใกล้คุณ',
+  descAllowLocation:
+    'HealthCare\nเข้าถึงข้อมูลตำแหน่งที่ตั้งเพื่อการรับข้อมูล\nและอัพเดทสถานที่ตั้งของคุณเท่านั้น',
+  allow: 'อนุญาต',
+  tryAgainLater: 'ลองใหม่ในภายหลัง',
+  confirm: 'ยืนยัน',
+  open: 'เปิด',
+  dot: '\u2022',
+  homeTab: 'หน้าแรก',
+  activityTab: 'กิจกรรม',
+  chatTab: 'ข้อความ',
+  accountTab: 'บัญชี',
+  searchGlobal: 'ค้นหาสิ่งที่คุณต้องการ',
+  chatWithStaff: 'แชทกับเจ้าหน้าที่',
+  booking: 'จองเข้ารับการบริการ',
+  call: 'โทร',
+  readMore: 'อ่านข้อมูลเพิ่มเติม',
+  thisIsAll: '...นี่คือทั้งหมด...',
+  backToTop: 'กลับไปด้านบน',
+  moreInfo: 'รายละเอียดเพิ่มเติม',
+  healthPackage: 'แพ็คเกจการตรวจสุขภาพ',
+  consultNow: 'ปรึกษาได้ทันที',
+  logout: 'ออกจากระบบ',
+  edit: 'แก้ไข',
+  help: 'ช่วยเหลือ',
+  learnMore: 'เรียนรู้เพิ่มเติม',
+  giftPage: 'หน้าของขวัญ',
+  somethingWrong: 'มีบางอย่างผิดพลาด'
+}
+
+export default global

@@ -1,0 +1,8 @@
+export {default as BannerClinic} from './BannerClinic'
+export {default as ClinicMain} from './ClinicMain'
+export {default as HeaderClinic} from './Header'
+export {default as TopContentClinic} from './TopContent'
+export {default as ServiceClinic} from './Service'
+export {default as MapClinic} from './Map'
+export {default as CardPackageClinic} from './CardPackageClinic'
+export {default as BackToTop} from './BackToTop'

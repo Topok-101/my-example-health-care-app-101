@@ -1,0 +1,7 @@
+export {default as PackageDetail} from './PackageDetail'
+export {default as HelpCall} from './HelpCall'
+export {default as ServiceDetail} from './ServiceDetail'
+export {default as DiagnosisDetail} from './DiagnosisDetail'
+export {default as PreparationDetail} from './PreparationDetail'
+export {default as ServiceSteps} from './ServiceSteps'
+export {default as Footer} from './Footer'

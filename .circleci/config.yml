@@ -1,0 +1,186 @@
+version: 2.1
+orbs:
+  macos: circleci/macos@2.3.4
+
+jobs:
+  node:
+    working_directory: ~/HealthCare
+    docker:
+      - image: cimg/node:16.15.0
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - persist_to_workspace:
+          root: ~/HealthCare
+          paths:
+            - node_modules
+
+  ios-build:
+    working_directory: ~/HealthCare
+    macos:
+      xcode: 14.1.0
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: adhoc
+
+    steps:
+      - checkout
+
+      - run: gem install fastlane
+
+      - run: sudo xcode-select -s /Applications/Xcode.app
+
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - restore_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+
+      - run:
+          command: pod install
+          working_directory: ios
+
+      - run:
+          command: bundle install
+          working_directory: ios
+
+      - save_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+
+      - save_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+          paths:
+            - ios/Pods
+
+      - run: curl -sL https://firebase.tools | bash
+
+      - run:
+          name: keychain_match_once
+          command: fastlane prepare_keychain_match
+          working_directory: ios
+
+      - run: security find-identity -v -p codesigning keychain_for_fastlane
+
+      - run:
+          name: keychain_match_second
+          command: fastlane prepare_keychain_match
+          working_directory: ios
+
+      - run:
+          name: distribute ios
+          command: yarn publish:staging:ios:ci
+          working_directory: ios
+
+      - run:
+          name: artifact-file
+          command: mkdir /tmp/artifacts;
+
+      - store_artifacts:
+          path: /tmp/art-1
+          destination: artifact-file
+
+      - store_artifacts:
+          path: /tmp/artifacts
+
+  android-build:
+    working_directory: ~/HealthCare/android
+    docker:
+      - image: circleci/android:api-29-node
+    steps:
+      - checkout:
+          path: ~/HealthCare
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - attach_workspace:
+          at: ~/HealthCare
+
+      - restore_cache:
+          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
+
+      - run: bundle install
+
+      - save_cache:
+          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: 'Install Firebase CLI'
+          command: |
+            curl -sL firebase.tools | bash
+
+      - run:
+          name: distribute android
+          command: |
+            yarn publish:staging:android
+
+      - store_artifacts:
+          path: /tmp/art
+
+      - store_test_results:
+          path: /tmp/artifacts
+
+workflows:
+  deploy-distribute:
+    jobs:
+      - node:
+          filters:
+            branches:
+              only:
+                - staging
+      - android-build:
+          requires:
+            - node
+          filters:
+            branches:
+              only:
+                - staging
+      - ios-build:
+          requires:
+            - node
+          filters:
+            branches:
+              only:
+                - staging
+# VS Code Extension Version: 1.5.0

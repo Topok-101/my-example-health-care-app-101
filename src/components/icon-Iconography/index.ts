@@ -1,0 +1,5 @@
+export {default as IconBounceIn} from './IconBounceIn'
+export {default as IconWithBadge} from './IconWithBadge'
+export {default as Avartar} from './Avartar'
+export {default as IconWithRounder} from './IconWithRounder'
+export {default as IconWithRactangle} from './IconWithRactangle'

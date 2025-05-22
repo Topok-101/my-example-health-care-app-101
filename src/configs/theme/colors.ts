@@ -1,0 +1,36 @@
+const theme = {
+  color: {
+    blueOpacity: 'rgba(214, 226, 255, 0.5)',
+    blue100: 'rgb(214, 226, 255)',
+    blue200: 'rgb(184, 204, 255)',
+    blue300: 'rgb(153, 182, 255)',
+    blue400: 'rgb(112, 153, 255)',
+    blue50: 'rgb(245, 248, 255)',
+    blue500: 'rgb(79, 129, 255)',
+    blue600: 'rgb(15, 83, 255)',
+    blue700: 'rgb(0, 65, 229)',
+    blue800: 'rgb(0, 51, 178)',
+    blue900: 'rgb(0, 41, 143)',
+    green: 'rgb(38, 196, 140)',
+    greenOpacity: 'rgba(38, 196, 140, 0.08)',
+    greyColorsGrey100: 'rgb(244, 245, 246)',
+    greyColorsGrey200: 'rgb(229, 231, 235)',
+    greyColorsGrey300: 'rgb(211, 214, 218)',
+    greyColorsGrey400: 'rgb(161, 168, 176)',
+    greyColorsGrey50: 'rgb(249, 250, 251)',
+    greyColorsGrey500: 'rgb(113, 119, 132)',
+    greyColorsGrey600: 'rgb(81, 89, 102)',
+    greyColorsGrey700: 'rgb(59, 68, 83)',
+    greyColorsGrey800: 'rgb(35, 43, 57)',
+    greyColorsGrey900: 'rgb(16, 22, 35)',
+    red: 'rgb(244, 66, 67)',
+    white: 'rgb(255, 255, 255)',
+    yellow: 'rgb(252, 193, 105)',
+    overlay: 'rgba(16, 22, 35 ,0.3)',
+    transparent: 'rgba(0, 0, 0 ,0)',
+    black: 'black',
+    orange: '#F79E1B',
+    blueGrey: 'rgba(214, 226, 255, 0.2)'
+  }
+}
+export default theme

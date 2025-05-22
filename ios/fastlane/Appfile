@@ -1,0 +1,10 @@
+app_identifier("com.HealthCare.dev") # The bundle identifier of your app
+# apple_id(
+#     # "your apple id"
+# ) # Your Apple Developer Portal username
+
+itc_team_id("118427913") # App Store Connect Team ID
+team_id("CW3CUZ28A4") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

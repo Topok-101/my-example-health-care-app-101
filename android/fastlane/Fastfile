@@ -1,0 +1,87 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Submit a new Beta Build to Firebase"
+  lane :distribute do
+    begin
+      gradle(task: 'clean')
+
+      gradle(
+        task: "assemble", 
+        build_type: "developmentrelease"
+      )
+
+      firebase_app_distribution(
+        app: ENV["FIREBASE_ID"],
+        groups: ENV["GROUP_TESTER"],
+        release_notes_file: "../note/release-notes.txt",
+        testers_file: "../testers.txt",
+        android_artifact_type: "APK",
+        # debug: true
+      )
+      puts ENV['ENV']
+      on_sccuess('Distribute')
+    rescue => exception
+      on_fail(exception)
+    end
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    # gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    # gradle(task: "clean assembleRelease")
+    # crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    # gradle(task: "clean assembleRelease")
+    # upload_to_play_store
+  end
+end
+
+def on_sccuess(names)
+  puts 'done ✅'
+  versionCode = android_get_version_code(
+    gradle_file: "../android/app/build.gradle"
+  )
+  versionName =  android_get_version_name(
+    gradle_file: "../android/app/build.gradle" 
+  )
+
+  line_notify(
+    access_token: ENV["LINE_TOKEN"],
+    message: "KaPok Deploy "+ names + " Android Success ✅"+" Version: "+ versionName + " ("+versionCode+ ")",
+  )
+
+end
+
+def on_fail(exception)
+  puts exception
+  line_notify(
+    access_token: ENV["LINE_TOKEN"],
+    message: "KaPok Deploy Production Android Fail 😵" ,
+  )
+end

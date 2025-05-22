@@ -1,0 +1,43 @@
+{
+    "repository": "@HealthCare/theme",
+    "personalAccessToken": "782a6d1f91c5a82dc6e743a2f27def83b84ede7b9c1929c5fa1a4d65ee0f6735",
+    "rules": [
+      {
+        "name": "to-react-native-theme-color",
+        "path": "src/configs/theme/colors.ts",
+        "filter": {
+          "types": ["color"]
+        },
+        "parsers": [
+          {
+            "name": "sort-by",
+            "options": {
+              "keys": ["name"]
+            }
+          },
+          {
+            "name": "to-react-native"
+          }
+        ]
+      },
+      {
+        "name": "to-react-native-theme-font",
+        "path": "src/configs/theme/fonts.ts",
+        "filter": {
+          "types": ["textStyle"]
+        },
+        "parsers": [
+          {
+            "name": "sort-by",
+            "options": {
+              "keys": ["name"],
+              "fileNameKey":  ["fontSize"]
+            }
+          },
+          {
+            "name": "to-react-native"
+          }
+        ]
+      }
+    ]
+  }

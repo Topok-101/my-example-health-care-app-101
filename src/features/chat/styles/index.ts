@@ -1,0 +1,10 @@
+export {ActiveDoctorStyle} from './ActiveDoctor.style'
+export {HeaderChatStyles} from './HeaderChat.style'
+export {ChatScreenStyles} from './ChatScreen.style'
+export {ComingActivityStyles} from './ComingActivity.style'
+export {ListLatestChatStyles} from './ListLatestChat.style'
+export {HeaderChatRoomStyles} from './HeaderChatRoom.style'
+export {WelcomeCardStyles} from './WelcomeCard.style'
+export {ChatGridStyles} from './ChatGrid.style'
+export {TextAreaChatStyle} from './TextAreaChat.style'
+

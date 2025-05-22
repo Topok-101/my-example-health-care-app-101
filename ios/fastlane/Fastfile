@@ -1,0 +1,153 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    setup_circle_ci
+  end
+
+  desc "Create Keychain_for_fastlane"
+  lane :prepare_keychain do 
+    create_keychain( 
+      name: "keychain_for_fastlane",
+      default_keychain: true,
+      password: ENV['MATCH_PASSWORD'],
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+  end
+
+
+  desc "Create Keychain_for_fastlane"
+  lane :prepare_keychain_match do 
+    match( 
+      type: "adhoc",
+      readonly: is_ci,
+      generate_apple_certs: false,
+      app_identifier: "com.HealthCare.dev",
+      verbose: true
+    )
+  end
+
+  desc "Push a new release build to the Firebase CI"
+  lane :distribute_ci do
+    
+    begin
+
+      gym(
+        workspace: "HealthCare.xcworkspace", 
+        scheme: "HealthCareDev",
+        export_method: "ad-hoc",
+        export_options: {
+          provisioningProfiles: { 
+            'com.HealthCare.dev' => 'match AdHoc com.HealthCare.dev',
+          }
+        }
+      )
+
+      firebase_app_distribution(
+        app: ENV['FIREBASE_ID'],
+        groups: ENV['GROUP_TESTER'],
+        release_notes_file: "../note/release-notes.txt",
+        testers_file: "../testers.txt"
+      )
+      on_sccuess('distribute')
+
+    rescue => exception
+      on_fail(exception)
+    end
+  end
+
+  lane :distribute_man do
+    
+    begin
+      update_code_signing_settings(
+        use_automatic_signing: true,
+        path: "./HealthCare.xcodeproj"
+      )
+
+      match(
+        type: "adhoc",
+        readonly: is_ci,
+        generate_apple_certs: false,
+        app_identifier: "com.HealthCare.dev",
+        verbose: true
+      )
+      
+      gym(
+        workspace: "HealthCare.xcworkspace", 
+        scheme: "HealthCareDev",
+        export_method: "ad-hoc",
+        export_options: {
+          provisioningProfiles: { 
+            'com.HealthCare.dev' => 'match AdHoc com.HealthCare.dev',
+          }
+        }
+      )
+
+      firebase_app_distribution(
+        app: ENV['FIREBASE_ID'],
+        groups: ENV['GROUP_TESTER'],
+        release_notes_file: "../note/release-notes.txt",
+        testers_file: "../testers.txt"
+      )
+      on_sccuess('distribute')
+
+    rescue => exception
+      on_fail(exception)
+    end
+  end
+end
+
+
+
+def on_get_cert()
+      get_certificates(
+        use_automatic_signing: true,
+        output_path: "./builds/certificates"
+      )
+
+      get_provisioning_profile(
+        adhoc: true,
+        force: true,
+        provisioning_name: 'com.HealthCare.dev Ad hoc',
+        output_path: "./builds/provisioning_profile"
+      )
+      puts 'done ✅'
+end
+
+def on_sccuess(names)
+  puts 'done ✅'
+
+  version = get_version_number(xcodeproj: "HealthCare.xcodeproj", target: "HealthCare")
+  build_number = get_build_number(xcodeproj: "HealthCare.xcodeproj")
+
+  line_notify(
+    access_token: ENV["LINE_TOKEN"],
+    message: "KaPok Build "+ names + " IOS Success ✅" + " Version : " + version + " (" + build_number+ ")",
+  )
+end
+
+def on_fail(exception)
+  puts exception
+
+  line_notify(
+    access_token: ENV["LINE_TOKEN"],
+    message: "KaPok Deploy Production IOS Fail 😵" ,
+  )
+end

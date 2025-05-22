@@ -1,0 +1,1 @@
+export {useScrollingAnimate} from './useScrollingAnimate'

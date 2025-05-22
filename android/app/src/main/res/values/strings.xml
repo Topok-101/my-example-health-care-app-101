@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HealthCare</string>
+    <string name="app_name_dev">HealthCareDev</string>
+    <string name="facebook_app_id">{put_id_here}</string>
+    <string name="fb_login_protocol_scheme">fb{put_id_here}</string>
+    <string name="facebook_client_token">{facebook_client_token}</string>
+    <string name="google_map_api_key">{google_map_api_key}</string>
+</resources>
